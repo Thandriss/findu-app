@@ -6,12 +6,10 @@ import Menu from './components/Menu'
 
 let characters = [
     {
-        name: "Inna Lon",
-        url: "./imag.jpg"
+        name: "Inna Lon"
     },
     {
-        name: "Inna Lon 2",
-        url: "./imag.jpg"
+        name: "Inna Lon 2"
     }
 ]
 
@@ -36,10 +34,10 @@ export const Main = () => {
                     <div className='card-container'>
                         {characters.map((character) => 
                         <TinderCard className='swipe' key={character.name} onSwipe={(dir)=>onSwipe(dir, character.name)} onCardLeftScreen={() => outOfFrame(character.name)}>
-                            <div style={{backgroundImage:'url(' + character.url + ')'}} className='card'>
+                            {/* <div style={{backgroundImage:'url(' + character.url + ')'}} className='card'>
                                 <h3>{character.name}</h3>
                                 <div className='discription'>I like football</div>
-                            </div>
+                            </div> */}
                         </TinderCard>
                         )}
                     </div>

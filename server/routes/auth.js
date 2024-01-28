@@ -83,8 +83,8 @@ router.post("/login",
 isNotAuth,
 body("email").trim().escape(),
 async (req, res) => {
-    req.session.new = 0
     const {email, password} = req.body;
+    req.session.email = email
     Users.findOne({email: email})
     .then ((user) => {
         if(user) {
@@ -93,6 +93,7 @@ async (req, res) => {
             };
             delete sessionUser.password;
             req.session.user = sessionUser;
+            console.log(req.session)
             // res.json({
             //     user: sessionUser,
             // });

@@ -38,14 +38,11 @@ const Auth = () => {
                 <div className="text"> {action}</div>
             </div>
             <div className="inputs">
-                <div className="input">
-                    <input id='email' type="email" placeholder='Email'></input>
+                <div className="auth_input">
+                    <input className='in' id='email' type="email" placeholder='Email'></input>
                 </div>
-                {/* <div className="input">
-                    <input type="UserName" placeholder='Username'></input>
-                </div> */}
-                <div className="input">
-                    <input id='password' type="password" placeholder='Password'></input>
+                <div className="auth_input">
+                    <input className='in' id='password' type="password" placeholder='Password'></input>
                 </div>
             </div>
             <div className="submit-container">
