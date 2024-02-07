@@ -1,0 +1,49 @@
+.chat-cont {
+    display: flex;
+    justify-content: space-between;
+    margin: auto;
+    margin-top: 20px;
+    width: 100vw;
+    height: 90vh;
+    backdrop-filter: blur(30px);
+    background: transparent;
+    box-shadow: 0 0.5px 0 1px rgba(255, 255, 255, 0.23) inset, 0 1px 0 0 rgba(255, 255, 255, 0.66) inset, 0 4px 16px rgba(0, 0, 0, 0.12);
+    padding-bottom:  30px;
+    border-radius: 6px;
+    overflow: hidden;
+}
+
+.cont-UC {
+    margin-top: 8vh;
+    margin-left: 7vh;
+    width: 80vw;
+    background: white;
+    border-radius: 6px;
+    font-size: 3vh;
+    height: 5vh;
+    padding: 1vh;
+}
+
+@media screen and (min-width: 600px) {
+    .chat-cont {
+        display:flex;
+        flex-direction: column;
+        margin: auto;
+        margin-top: 100px;
+        width: 80vw;
+        height: 80vh;
+        backdrop-filter: blur(30px); 
+        box-shadow: 0 0.5px 0 1px rgba(255, 255, 255, 0.23) inset, 0 1px 0 0 rgba(255, 255, 255, 0.66) inset, 0 4px 16px rgba(0, 0, 0, 0.12);
+        padding-bottom:  30px;
+        border-radius: 6px;
+        overflow: hidden;
+    }
+    .cont-UC {
+        margin: 10px;
+        background: white;
+        border-radius: 6px;
+        font-size: 2vh;
+        height: 5vh;
+        padding: 1vh;
+    }
+}

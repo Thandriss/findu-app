@@ -1,11 +1,13 @@
 var express = require('express');
 var path = require('path');
 const bodyParser = require('body-parser')
+const passport = require('passport');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 var indexRouter = require('./routes/index');
-var usersRouter = require('./routes/auth');
+var authRouter = require('./routes/auth');
 var dataRouter = require('./routes/save');
+var usersRouter = require('./routes/users');
 const session = require('express-session');
 var cors = require('cors')
 const { createClient } = require("redis");
@@ -39,8 +41,9 @@ app.use(function(req, res, next) {
   });
 
 app.use('/', indexRouter);
-app.use('/auth', usersRouter);
+app.use('/auth', authRouter);
 app.use('/data', dataRouter);
+app.use('/users', usersRouter);
 
 if (process.env.NODE_ENV === "production") {
     app.use(express.static(path.resolve("..", "client", "build")))
@@ -56,15 +59,9 @@ if (process.env.NODE_ENV === "production") {
 }
 app.use(cors({origin: "http://localhost:3000", optionsSuccessStatus: 200}))
 
-app.get('/my', (req, res) => {
-    if (req.session.my === undefined) {
-        req.session.my = 0;
-    } else {
-        req.session.my++;
-    }
-    console.log(req.session.my)
-    return res.json(req.session)
-})
+app.use(passport.initialize());
+app.use(passport.session());
+app.use(passport.authenticate("session"));
 
 app.listen(port, () => {
     console.log("Server listen!")

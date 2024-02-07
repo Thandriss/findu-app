@@ -8,9 +8,11 @@ import Carusel from './components/Carusel';
 export const Profile = (props) => {
   const [mode, setMode] = useState("View")
   const location = useLocation();
+  const [date, setDate] = useState(location.state.date) 
   const [name, setName] = useState(location.state.name) 
-  const [surename, setSurename] = useState(location.state.surename) 
   const [description, setDesc] = useState(location.state.description) 
+  const [gender, setGender] = useState(location.state.gender) 
+  const [UserInterest, setInt] = useState("") 
   console.log(location.state)
   let save = [];
 
@@ -23,7 +25,7 @@ export const Profile = (props) => {
   
   const sendData = async () => {
     let img_id = [];
-    let delition = await fetch('/data/delImgs')
+    let deletion = await fetch('/data/delImgs')
     if(save.length !== 0) {
       const formData = new FormData();
       formData.append("name", "smth");
@@ -45,15 +47,22 @@ export const Profile = (props) => {
       });
     }
     
-    let partname = document.getElementsByTagName('p')[0].innerText
-    let sName = document.getElementsByTagName('p')[1].innerText
+    // let partname = document.getElementsByTagName('p')[0].innerText
+    let partname = document.getElementsByTagName('p')[1].innerText
     let desc = document.getElementsByTagName('p')[2].innerText
-    console.log(name);
+    let selector = document.getElementById("selectMode");
+    let Usergender = selector.options[selector.selectedIndex].text;
+    console.log(Usergender)
+    let SelectInterest = document.getElementById("selectInt");
+    let interest = SelectInterest.options[SelectInterest.selectedIndex].text;
+    console.log(interest);
     let toSend = {
       id: img_id,
+      date: date,
       name: partname,
-      surename: sName,
-      description: desc
+      description: desc,
+      gender:Usergender,
+      interest: interest
     }
     console.log(toSend)
     let text = JSON.stringify(toSend)
@@ -68,8 +77,9 @@ export const Profile = (props) => {
       console.log(img_id);
       setMode("View")
       setName(partname)
-      setSurename(sName)
       setDesc(desc)
+      setGender(Usergender)
+      setInt(interest)
   }
 
   return (
@@ -78,17 +88,38 @@ export const Profile = (props) => {
       <div className='contain'>
         <div className='info_user'>
           <div></div>
-          <div className='name'>
-            {mode==='View'? <p className='name_part'>{name}</p>: <p contentEditable="true" className='name_part'>{name}</p>}
+          <div className='date'>
+            <p className='name_part'>{date}</p>
           </div>
-          <div className='sec_name'>
-            {mode==='View'? <p className='sname_part'>{surename}</p>: <p contentEditable="true" className='sname_part'>{surename}</p>}
+          <div className='name'>
+            {mode==='View'? <p className='sname_part'>{name}</p>: <p contentEditable="true" className='sname_part'>{name}</p>}
           </div>
           <div className='description'>
             {mode==='View'? <p className='desc_part'>{description}</p>: <p contentEditable="true" className='desc_part'>{description}</p>}
             
           </div>
-          {mode==='View'? <div className='submit_new' onClick={()=> setMode("Edit")}>Edit</div> : <div className='submit_new' onClick={()=> sendData()}>View</div>}
+          <div className='gen'>
+            <tr>
+              {mode==='View'? <div>Gender: {gender}</div>: 
+              <><div className='ch_gen'>
+                Gender:
+                  <select id="selectMode" defaultValue="mode1" multiple={false}>
+                    <option value="mode1">female</option>
+                    <option value="mode2">male</option>
+                  </select>
+                </div>
+                <div className='int'>
+                  Interest:
+                    <select id="selectInt" defaultValue="mode1" multiple={false}>
+                      <option value="mode1">female</option>
+                      <option value="mode2">male</option>
+                    </select>
+                  </div>
+                  </>
+              }
+            </tr>
+          </div>
+          {location.state.mode? mode==='View'? <div className='submit_new' onClick={()=> setMode("Edit")}>Edit</div> : <div className='submit_new' onClick={()=> sendData()}>View</div>: <></>}
         </div>
         <div className='img_container'>
           <Carusel imgData={location.state.images}/>

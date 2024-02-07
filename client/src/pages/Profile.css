@@ -42,7 +42,7 @@ div.description {
     text-align: left;
     margin-left: 1vw;
     margin-right: 20px;
-    margin-top: 20px;
+    margin-top: 10px;
     overflow:auto;
     height:auto;
     border: 1px solid;
@@ -50,26 +50,38 @@ div.description {
     border-radius: 6px;
     height: 20vh;
 }
-div.name {
+div.date {
     text-align: left;
     margin-left: 1vw;
     margin-right: 20px;
-    margin-top: 20px;
+    margin-top: 10px;
     border: 1px solid;
     border-radius: 6px;
     font-size: 2vh;
     height: 4vh;
 }
 
-div.sec_name {
+div.name {
     text-align: left;
     margin-left: 1vw;
     margin-right: 20px;
-    margin-top: 20px;
+    margin-top: 10px;
     border: 1px solid;
     border-radius: 6px;
     font-size: 2vh;
     height: 4vh;
+}
+
+.ch_gen {
+    text-align: left;
+    margin-top: 20px;
+    margin-right: 10px;
+    float: left;
+}
+.int {
+    text-align: left;
+    margin-top: 20px;
+    float: right;
 }
 
 .submit_new {
@@ -139,7 +151,7 @@ div.sec_name {
         border-radius: 6px;
         height:50vh;
     }
-    div.name {
+    div.date {
         text-align: left;
         margin-right: 20px;
         margin-top: 20px;
@@ -147,7 +159,7 @@ div.sec_name {
         border-radius: 6px;
     }
 
-    div.sec_name {
+    div.name {
         text-align: left;
         margin-right: 20px;
         margin-top: 20px;
@@ -155,7 +167,7 @@ div.sec_name {
         border-radius: 6px;
     }
     .submit_new {
-        margin-top: 10px;
+        margin-top: 20px;
         display:flex;
         justify-content: center;
         align-items: center;
@@ -168,6 +180,15 @@ div.sec_name {
         font-weight: 200;
         cursor: pointer;
     }
-
+    .ch_gen {
+        text-align: left;
+        margin-top: 20px;
+        margin-right: 10px;
+        float: left;
+    }
+    .int {
+        text-align: left;
+        margin-top: 20px;
+    }
     
 }

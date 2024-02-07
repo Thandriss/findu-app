@@ -22,12 +22,28 @@ export const Menu = () => {
         }
         console.log(save)
         
-        nav('/profile',  {state: {images: save, name: data.user.name, surename: data.user.surename, description: data.user.description}})
+        nav('/profile',  {state: {images: save, date: data.user.date, name: data.user.name, description: data.user.description, gender: data.user.gender, mode: true}})
     }
+
+    const goToCards = async () => {
+        nav('/cards')
+    } 
+
+    const logOut = async() => {
+        fetch("/auth/logout");
+        nav('/')
+    }
+
+    const goToChat = async () => {
+        let names = await fetch('/users/matches');
+        let data = await names.json();
+        console.log(data)
+        nav('/chats', {state: {list: data.data}})
+    }
+    
   return (
     <div>
         <nav className="navbar">
-            {/* {cookie} */}
             <button className="toggle" onClick={() => setNavbarOpen((prev) => !prev)}>
                 {navbarOpen ? (
                 <MdClose style={{ width: '32px', height: '32px' }} />
@@ -37,7 +53,9 @@ export const Menu = () => {
             </button>
             <ul className={`menu-nav${navbarOpen ? ' show-menu' : ''}`}>
                     <li onClick={()=> goToProfile()}>Profile</li>
-                    <li >Log out</li>
+                    <li onClick={()=> goToCards()}>Cards</li>
+                    <li onClick={()=> goToChat()}>Chats</li>
+                    <li onClick={()=> logOut()}>Log out</li>
             </ul>
         </nav>
     </div>

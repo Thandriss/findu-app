@@ -1,7 +1,10 @@
 var express = require('express');
 var router = express.Router();
 const {body, validationResult } = require("express-validator");
-const bodyParser = require('body-parser')
+const bodyParser = require('body-parser');
+const passport = require('passport');
+var moment = require('moment');
+const passSet = require('./config/passport-settings')
 const Users = require("./models/Users");
 const Profiles = require("./models/Profiles");
 const session = require('express-session');
@@ -41,13 +44,20 @@ async (req , res ) => {
     .then(async (user)=> {
         console.log(user)
         if(!user) {
+            let date = moment();
+            let currentDate = date.format('D/MM/YYYY');
+            console.log(currentDate)
             let newProf =new Profiles({
                 name: "",
-                surename: "",
+                date: currentDate,
                 description: "",
                 images: [],
-                age: 0
+                gender: "",
+                interest: "",
+                liked: [],
+                matched: []
             })
+            console.log(newProf)
             console.log(newProf._id.toString())
 
             let new_pass 
@@ -64,7 +74,6 @@ async (req , res ) => {
                     }).save()
                     newProf.save()
                     res.status(200).send({status: "ok"})
-                    console.log("registered")
                 })
             })
         } else {
@@ -73,6 +82,36 @@ async (req , res ) => {
     })
 })
 
+router.get('/google', passport.authenticate('google',{ 
+    scope: [
+        'https://www.googleapis.com/auth/userinfo.profile',
+        'https://www.googleapis.com/auth/userinfo.email'
+    ]
+}));
+
+router.get("/google/redirect", 
+ passport.authenticate("google"), 
+ (req, res) => {
+    console.log('session')
+    console.log(req.session)
+    console.log('end session')
+    req.session.user = {
+        _id: req.session.passport.user._id,
+        email: req.session.passport.user.email,
+        password: req.session.passport.user.password,
+        profile: req.session.passport.user.profile.toString()
+    };
+    console.log(req.session.user)
+    console.log("/google/redirect")
+    res.redirect(`http://localhost:3000/cards`);
+});
+
+router.get('/logout', function(req,res){
+    res.clearCookie('connect.sid');
+    req.session.destroy(function (err) {
+           res.redirect('http://localhost:3000/');
+       });
+   });
 
 function isNotAuth(req, res, next) {
     if (req.session.user) return res.redirect("/")
@@ -93,17 +132,9 @@ async (req, res) => {
             };
             delete sessionUser.password;
             req.session.user = sessionUser;
-            console.log(req.session)
-            // res.json({
-            //     user: sessionUser,
-            // });
             bcrypt.compare(password, user.password, (err, isMatch) => {
                 if(err) throw err
                 if(isMatch) {
-                // const sessionId = uuidv4();
-                // res.cookie('connect.sid', sessionId)
-                // saveToken.add(token);
-                // passport.authenticate('local')
                 res.send({"success": true, "user": sessionUser})
             } else {
                 res.send({"success": false, "message": "Invalid credentials"})

@@ -31,6 +31,24 @@ const Auth = () => {
         nav('/cards')    
     }
 
+    function googleLog() {
+        window.open(`http://localhost:1234/auth/google`, "_self");   
+    }
+
+    function facebookLog() {
+        console.log("facebook log")
+            console.log(action)
+            fetch("/auth/facebook", {
+                method: "POST",
+                headers: {
+                    "Content-type": "application/json"
+                },
+                body: '{ "email": "' + document.getElementById("email").value +'", "password":"' + document.getElementById("password").value +'" }'
+            })
+        
+        nav('/cards')    
+    }
+
   return (
     <div className="b">
         <div className="container">
@@ -49,6 +67,7 @@ const Auth = () => {
                 <div className={action==="Log In"? "submit grey": "submit"} onClick={() => {action==="Sign Up"? registration():setAction("Sign Up")}}>Sign up</div>
                 <div className={action==="Sign Up"? "submit grey": "submit"} onClick={() => {action==="Log In"? loggin():setAction("Log In")}}>Log in</div>
             </div>
+            {action==="Log In"? <div className="thirdP"><div id='googleAuth' onClick={() => googleLog()}>Google+</div> <div id='facebookAuth'>Facebook</div></div>: <></>}
         </div>
     </div>
   )

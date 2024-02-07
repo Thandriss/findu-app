@@ -5,9 +5,13 @@ const Schema = mongoose.Schema;
 let profiles = new Schema({
     description: String,
     images: Array,
+    date: String,
     name: String,
-    surename: String,
-    age: Number
+    gender: String,
+    interest: String, 
+    matched: Array,
+    liked: Array,
+    chats: Array
 });
 
 module.exports = mongoose.model("Profiles", profiles);
