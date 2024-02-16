@@ -1,7 +1,7 @@
 const mongoose = require("mongoose");
 
 const Schema = mongoose.Schema;
-
+// model, having all information about profile
 let profiles = new Schema({
     description: String,
     images: Array,
@@ -11,6 +11,7 @@ let profiles = new Schema({
     interest: String, 
     matched: Array,
     liked: Array,
+    disliked: Array,
     chats: Array
 });
 

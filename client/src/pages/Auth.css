@@ -83,20 +83,6 @@
     font-weight: 500;
     cursor: pointer;
 }
-#facebookAuth {
-    display:flex;
-    justify-content: center;
-    align-items: center;
-    float: right;
-    width: 30vw;
-    height: 59px;
-    color: white;
-    background: rgb(69, 120, 231);
-    border-radius: 50px;
-    font-size: 19px;
-    font-weight: 500;
-    cursor: pointer;
-}
 
 .grey {
     background: #EAEAEA;
@@ -189,21 +175,6 @@
         font-weight: 500;
         cursor: pointer;
     }
-    #facebookAuth {
-        display:flex;
-        justify-content: center;
-        align-items: center;
-        width: 220px;
-        height: 59px;
-        color: white;
-        float: right;
-        background: rgb(69, 120, 231);
-        border-radius: 50px;
-        font-size: 19px;
-        font-weight: 500;
-        cursor: pointer;
-    }
-    
     .grey {
         background: #EAEAEA;
         color: #676767;

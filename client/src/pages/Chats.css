@@ -12,9 +12,12 @@
     border-radius: 6px;
     overflow: hidden;
 }
+.list-chats {
+    margin-top: 5vh;
+}
 
 .cont-UC {
-    margin-top: 8vh;
+    margin-top: 2vh;
     margin-left: 7vh;
     width: 80vw;
     background: white;
@@ -44,6 +47,8 @@
         border-radius: 6px;
         font-size: 2vh;
         height: 5vh;
+        width: 40vw;
         padding: 1vh;
+        margin-left: 10vw;
     }
 }

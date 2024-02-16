@@ -1,0 +1,15 @@
+
+.pagination {
+    justify-content: center;
+}
+
+
+@media screen and (min-width: 600px) {
+    .pagination {
+        display: flex;
+        flex-direction:row;
+        margin-top: 0vh;
+        margin-right: 0vw;
+        justify-content: center;
+    }
+}

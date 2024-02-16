@@ -1,31 +1,40 @@
 import React from 'react'
 import Menu from './components/Menu'
 import './Chats.css';
-import { useState } from 'react'
-import {useLocation} from 'react-router-dom';
-import {useNavigate} from 'react-router-dom'
+import Pagination from './components/Pagination'
+import ChatList from './components/ChatList'
+import { useState, useEffect } from 'react'
 
 const Chats = () => {
   
-  const location = useLocation();
-  const [listOfMatched, setList] = useState(location.state.list)
-  console.log(location.state.list)
-  const nav = useNavigate();
+  const [listOfMatched, setList] = useState([])
+  const [cur, setCur] = useState(1);
+  const [chatsPerPage, setChats] = useState(10);
 
-  const goToUserChat = (chatId) => {
-    nav('/userChat', {state: {id: chatId}})
+  //get all id of chats
+  const getChats = async () => {
+    let names = await fetch('/users/matches');
+    let data = await names.json();
+    setList(data.data)
   }
 
+  useEffect(() => {
+    getChats()
+  }, [])
+  
+  //current posts
+  let indexOfLastPost = cur * chatsPerPage;
+  let indexOfFirstPost = indexOfLastPost - chatsPerPage;
+  let curList = listOfMatched.slice(indexOfFirstPost, indexOfLastPost)
+  //change page
+  const paginate = (pageNumber) => {
+    setCur(pageNumber)
+  }
   return (
     <div>
-        <Menu/>
-        <div className='chat-cont'>
-            <div className='list-chats'>
-              {listOfMatched.map((character) => 
-                  <div className='cont-UC' onClick={() => goToUserChat(character.chatId)}>{character.name}</div>
-              )}
-            </div>
-        </div>
+        <Menu/> {/*button for opening menu*/}
+        <ChatList curList={curList}/>
+        {listOfMatched.length <= chatsPerPage? <></>: <Pagination chatsPerPage={chatsPerPage} total={listOfMatched.length} paginate={paginate}/>}
     </div>
   )
 }

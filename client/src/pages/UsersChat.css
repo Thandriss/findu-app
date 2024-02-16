@@ -40,6 +40,33 @@
     font-size: 19px;
 }
 
+.get {
+    display:flex;
+    justify-content: center;
+    align-items: center;
+    width: 30vw;
+    height: 59px;
+    color: white;
+    background: black;
+    border-radius: 50px;
+    font-size: 2vh;
+    font-weight: 500;
+    cursor: pointer;
+    margin-top: 2vh;
+    margin-left: 10vw;
+}
+
+.mess-box {
+    background-color: rgb(241, 239, 239);
+    border-radius: 6px;
+    width: 45vw;
+    font-size: 2vh;
+    padding: 1vh;
+    margin-top: 1vh;
+    overflow: hidden;
+    word-wrap: break-word;
+}
+
 @media screen and (min-width: 600px) {
     
     .main-cont {
@@ -66,6 +93,22 @@
         overflow-x: hidden;
     }
 
+    .get {
+        display:flex;
+        justify-content: center;
+        align-items: center;
+        float: right;
+        width: 220px;
+        height: 59px;
+        color: white;
+        background: black;
+        border-radius: 50px;
+        font-size: 19px;
+        font-weight: 500;
+        cursor: pointer;
+        margin-right: 20vw;
+    }
+
     .message-cont::-webkit-scrollbar {
         display: none;
         color: grey;
@@ -85,7 +128,7 @@
         padding-left: 6px;
         font-size: 19px;
     }
-    .box {
+    .mess-box {
         background-color: rgb(241, 239, 239);
         border-radius: 6px;
         width: 45vw;

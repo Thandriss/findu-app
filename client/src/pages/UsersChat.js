@@ -1,33 +1,55 @@
 import Menu from './components/Menu'
 import './UsersChat.css';
 import {useLocation} from 'react-router-dom';
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 
 const UsersChat = () => {
   const location = useLocation();
-  let [messages, setMess] = useState(["hi"])
+  let [messages, setMess] = useState([]) //all messages
+  const [chatId, setChatId] = useState(location.state.id) //id of chat for fetch
 
-  const handleKeyPress = (event) => {
+  //function to send a message, if user pressed enter 
+  const handleKeyPress = async (event) => { 
     if(event.key === 'Enter'){
       let mess = document.getElementById("message").value
       document.getElementById("message").value = ""
-      setMess([...messages, mess])
-      console.log(mess)
-      console.log(messages)
+      let toSend = {
+        messages: mess
+      }
+      let send = await fetch('/mess/send/' + chatId, { //send message in the db
+        method: "POST",
+        headers: {
+          "Content-type": "application/json"
+          },
+        body: JSON.stringify(toSend)
+      })
+      let data = await send.json()
+      setMess(data.messages)//message saved in 
     }
   }
+  //function to get all messages
+  const getAll = async () => {
+    let getInfo = await fetch('/mess/all/' + chatId)
+    let data = await getInfo.json() //getting the json 
+    setMess(data.messages) //show messages on the screen
+    console.log(data.messages)
+  }
+
   return (
     <div>
-        <Menu/>
+        <Menu/> {/*button for opening menu*/}
         <div className='main-cont'>
             <div className='message-cont'>
                 {messages.map((mess)=> 
-                <div className='box'>
-                  {mess}
+                <div className='mess-box'>
+                  {mess.name + ': ' + mess.text}
                 </div>)}
             </div>
-            <div className="mess_input">
-                    <input className='in_mess' id='message' placeholder='Message' onKeyDown={(event) => handleKeyPress(event)}></input>
+              <div className="mess_input">
+                      <input className='in_mess' id='message' placeholder='Message' onKeyDown={(event) => handleKeyPress(event)}></input>
+                      <div className="button-get">
+                  <div className='get' onClick={() => getAll()}>Get Message</div>
+              </div>
             </div>
         </div>
     </div>

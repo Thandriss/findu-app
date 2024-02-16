@@ -1,22 +1,23 @@
 var express = require('express');
 var path = require('path');
-const bodyParser = require('body-parser')
-const passport = require('passport');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
-var indexRouter = require('./routes/index');
 var authRouter = require('./routes/auth');
 var dataRouter = require('./routes/save');
 var usersRouter = require('./routes/users');
+var messagesRouter = require('./routes/messages');
 const session = require('express-session');
 var cors = require('cors')
+
+//connection of the redis
 const { createClient } = require("redis");
 const connectRedis = require('connect-redis');
-const port  = 1235
 const redisClient = createClient({ legacyMode: true });
 redisClient.connect().catch((e)=> console.log("no connection"))
 const RedisStore = connectRedis(session);
 const app = express();
+
+//Redis session for security
 app.use(session({
     store: new RedisStore({ client: redisClient }),
     secret: 'my-secret-key',
@@ -25,7 +26,7 @@ app.use(session({
     cookie: {
       secure: false,
       httpOnly: false,
-      maxAge: 1000 * 60 * 60 * 24
+      maxAge: 1000 * 60 * 60
     },
   }));
 
@@ -40,10 +41,10 @@ app.use(function(req, res, next) {
     next();
   });
 
-app.use('/', indexRouter);
-app.use('/auth', authRouter);
-app.use('/data', dataRouter);
-app.use('/users', usersRouter);
+app.use('/auth', authRouter); //path for authentification
+app.use('/data', dataRouter); //path for getting user's data
+app.use('/users', usersRouter); //path for getting data connected with like/dislike and match
+app.use('/mess', messagesRouter); //path for messages
 
 if (process.env.NODE_ENV === "production") {
     app.use(express.static(path.resolve("..", "client", "build")))
@@ -59,12 +60,5 @@ if (process.env.NODE_ENV === "production") {
 }
 app.use(cors({origin: "http://localhost:3000", optionsSuccessStatus: 200}))
 
-app.use(passport.initialize());
-app.use(passport.session());
-app.use(passport.authenticate("session"));
-
-app.listen(port, () => {
-    console.log("Server listen!")
-})
 
 module.exports = app;

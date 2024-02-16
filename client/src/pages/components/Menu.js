@@ -1,14 +1,18 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { MdClose } from 'react-icons/md';
 import { FiMenu } from 'react-icons/fi';
-import { useState } from 'react';
+import { useState} from 'react';
 import {useNavigate} from 'react-router-dom'
 import './Menu.css';
+import i18n from "../../i18n.js";
+import { useTranslation } from 'react-i18next';
 
 export const Menu = () => {
     const [navbarOpen, setNavbarOpen] = useState(false);
     const nav = useNavigate();
+    const { t } = useTranslation();
 
+    //if user clicked on profile button
     const goToProfile = async () => {
         let userInfo = await fetch("/data/userProf");
         let data = await userInfo.json();
@@ -21,7 +25,7 @@ export const Menu = () => {
             console.log(save)
         }
         console.log(save)
-        
+        //set parameters with all user's data
         nav('/profile',  {state: {images: save, date: data.user.date, name: data.user.name, description: data.user.description, gender: data.user.gender, mode: true}})
     }
 
@@ -29,16 +33,20 @@ export const Menu = () => {
         nav('/cards')
     } 
 
-    const logOut = async() => {
+    const logOut = async() => {//fuction to log out
         fetch("/auth/logout");
         nav('/')
     }
 
-    const goToChat = async () => {
+    const goToChat = async () => { //go to dashboard with list of chats
         let names = await fetch('/users/matches');
         let data = await names.json();
         console.log(data)
-        nav('/chats', {state: {list: data.data}})
+        nav('/chats')
+    }
+
+    const changeLanguage = (lng) => { //switch languages
+        i18n.changeLanguage(lng);
     }
     
   return (
@@ -52,10 +60,12 @@ export const Menu = () => {
                 )}
             </button>
             <ul className={`menu-nav${navbarOpen ? ' show-menu' : ''}`}>
-                    <li onClick={()=> goToProfile()}>Profile</li>
-                    <li onClick={()=> goToCards()}>Cards</li>
-                    <li onClick={()=> goToChat()}>Chats</li>
-                    <li onClick={()=> logOut()}>Log out</li>
+                    <li onClick={()=> goToProfile()}> {t('Profile')} </li>
+                    <li onClick={()=> goToCards()}> {t('Cards')} </li>
+                    <li onClick={()=> goToChat()}> {t('Chats')} </li>
+                    <li onClick={() =>changeLanguage('en')}>EN</li>
+                    <li onClick={() =>changeLanguage('rus')}>RUS</li>
+                    <li onClick={()=> logOut()}> {t('Log out')} </li>
             </ul>
         </nav>
     </div>

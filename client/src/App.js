@@ -5,16 +5,18 @@ import Main from './pages/Main';
 import Profile from './pages/Profile';
 import Chats from './pages/Chats';
 import UsersChat from './pages/UsersChat';
+import {useCookies} from 'react-cookie'
 
 function App() {
+  const [cookies, setCookie] = useCookies(['connect.sid'])
   return (
     <Router>
       <Routes>
-        <Route path='/' element={<Auth/>}></Route>
-        <Route path='/cards' element={<Main/>}></Route>
-        <Route path='/profile' element={<Profile/>}></Route>
-        <Route path='/chats' element={<Chats/>}></Route>
-        <Route path='/userChat' element={<UsersChat/>}></Route>
+        {!cookies['connect.sid'] &&<Route path='/' element={<Auth/>}></Route>} {/*registration page*/}
+        {cookies['connect.sid'] &&<Route path='/cards' element={<Main/>}></Route>}  {/*route for the main page*/}
+        {cookies['connect.sid'] &&<Route path='/profile' element={<Profile/>}></Route>} {/*profile page*/}
+        {cookies['connect.sid'] &&<Route path='/chats' element={<Chats/>}></Route>} {/*page with all awailable chats*/}
+        {cookies['connect.sid'] &&<Route path='/userChat' element={<UsersChat/>}></Route>} {/*page with dialogue*/}
       </Routes>
     </Router>
   );

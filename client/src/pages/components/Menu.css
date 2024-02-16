@@ -11,7 +11,7 @@ button {
 .menu-nav.show-menu {
     width: 100%;
     transform: translateX(0px);
-    margin-top: 8vh;
+    margin-top: 50vh;
   }
 
 .menu-nav li a, .menu-nav li span {
@@ -43,6 +43,7 @@ button {
     z-index: 1;
   }
 
+
 @media screen and (min-width: 600px) {
     .navbar {
         position: relative;
@@ -57,6 +58,7 @@ button {
     .menu-nav.show-menu {
         width: 100%;
         transform: translateX(0px);
+        margin-top: 30vh;
       }
     
     .menu-nav li a, .menu-nav li span {
