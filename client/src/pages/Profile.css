@@ -13,12 +13,16 @@
     border-radius: 6px;
 }
 
+
 .img_container {
     margin-top: 10vh;
-    margin-left: 3vw;
+    margin-left: 10vw;
     padding-left: 1vw;
-    width: 91vw;
-    position:absolute
+    width: 50vw;
+    height: 10px;
+    position:relative;
+    display: flex;
+    justify-content: center;
 }
 
 .info_user {
@@ -100,6 +104,14 @@ div.name {
     cursor: pointer;
 }
 
+select {
+    display: inline-block;
+    width: 49%;
+    -moz-box-sizing: border-box;
+    -webkit-box-sizing: border-box;
+    box-sizing: border-box;
+}
+
 @media screen and (min-width: 600px) {
     .contain {
         display:flex;
@@ -111,6 +123,10 @@ div.name {
         backdrop-filter: blur(30px); 
         box-shadow: 0 0.5px 0 1px rgba(255, 255, 255, 0.23) inset, 0 1px 0 0 rgba(255, 255, 255, 0.66) inset, 0 4px 16px rgba(0, 0, 0, 0.12);
         border-radius: 6px;
+    }
+
+    .add-photo {
+        height: 10px;
     }
 
     .info_user {
@@ -127,10 +143,10 @@ div.name {
         margin-top: 1vh;
         margin-left: 37vw;
         padding-left: 1vw;
-        width: 30vw;
-        height: 100vh;
+        width: 20vw;
+        height: 70vh;
         border-radius: 6px;
-        position:absolute
+        position:relative
     }
 
     p {
@@ -171,7 +187,7 @@ div.name {
         display:flex;
         justify-content: center;
         align-items: center;
-        width: 220px;
+        width: 10vw;
         height: 40px;
         color: white;
         background: black;
@@ -189,6 +205,13 @@ div.name {
     .int {
         text-align: left;
         margin-top: 20px;
+    }
+    select {
+        display: inline-block;
+        width: 49%;
+        -moz-box-sizing: border-box;
+        -webkit-box-sizing: border-box;
+        box-sizing: border-box;
     }
     
 }

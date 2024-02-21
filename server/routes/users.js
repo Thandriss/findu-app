@@ -29,7 +29,6 @@ router.get('/toswipe/:int', (req, res) => {
                 final.push(save[i])
               }
             }
-            console.log(final)
           return res.status(200).send({data: final})
         })
     })
@@ -48,9 +47,8 @@ router.get('/matches', (req, res) => {
         let list = []
         for (let i=0; i<save.length; i++) {
           let user = await Profiles.findById(save[i])
-          list.push({name: user.name, chatId: users.chats[i]})
+          list.push({id: user._id, name: user.name, chatId: users.chats[i]})
         }
-        console.log(save)
         return res.status(200).send({data: list})
     })
   } catch(err) {

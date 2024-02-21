@@ -43,6 +43,7 @@ button {
     z-index: 1;
   }
 
+  li { cursor: pointer; }
 
 @media screen and (min-width: 600px) {
     .navbar {
@@ -54,7 +55,7 @@ button {
         border: none;
         font-size: 20px;
     }
-    
+    li { cursor: pointer; }
     .menu-nav.show-menu {
         width: 100%;
         transform: translateX(0px);

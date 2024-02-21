@@ -1,19 +1,61 @@
 import React from 'react'
 import './Profile.css';
 import Menu from './components/Menu';
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import {useLocation} from 'react-router-dom';
 import Carusel from './components/Carusel';
+import toast, { Toaster } from 'react-hot-toast';
 
 export const Profile = (props) => {
   const [mode, setMode] = useState("View") //mode of page can be "View" or "Edit"
   const location = useLocation();
-  const [date, setDate] = useState(location.state.date) 
-  const [name, setName] = useState(location.state.name) 
-  const [description, setDesc] = useState(location.state.description) 
-  const [gender, setGender] = useState(location.state.gender) 
-  const [UserInterest, setInt] = useState("") 
+  const [date, setDate] = useState("") 
+  const [name, setName] = useState("") 
+  const [description, setDesc] = useState("") 
+  const [gender, setGender] = useState("") 
+  const [UserInterest, setInt] = useState("")
+  const [images, setImg] = useState([])
   let save = [];
+
+  const getData = async () => {
+    try {
+        if (location.state.mode) {
+          let userInfo = await fetch("/data/userProf");
+          let data = await userInfo.json();
+          setDate(data.user.date)
+          setName(data.user.name)
+          setDesc(data.user.description)
+          setGender(data.user.gender)
+          let imgArr = [];
+          for (let i=0; i<data.user.images.length; i++) {
+            let imgInfo = await fetch('/data/images/' + data.user.images[i]);
+            let img = await imgInfo.blob();
+            imgArr.push(img)
+          }
+          setImg(imgArr)
+        } else {
+          let userInfo = await fetch("/data/userProf/" + location.state.id);
+          let data = await userInfo.json();
+          setDate(data.user.date)
+          setName(data.user.name)
+          setDesc(data.user.description)
+          setGender(data.user.gender)
+          let imgArr = [];
+          for (let i=0; i<data.user.images.length; i++) {
+            let imgInfo = await fetch('/data/images/' + data.user.images[i]);
+            let img = await imgInfo.blob();
+            imgArr.push(img)
+          }
+          setImg(imgArr)
+        }
+    } catch (error) {
+        console.log(error)
+    }
+}
+
+  useEffect(() => {
+    getData()
+  }, [])
 
   const handleSendPhoto = async (e) => {
     save = [];
@@ -38,12 +80,11 @@ export const Profile = (props) => {
               "Content-Type": "multipart/form-data",
             }
         });
-      let data = response.json();
-      console.log(data);
-      await data.then((value) => {
-        console.log(value.id);
-        img_id=value.id;
-      });
+      let data = await response.json();
+      if (data.messages) {
+        toast.error(data.messages)//toast for error
+      }
+      img_id=data.id;
     }
     //getting data from the fields
     let partname = document.getElementsByTagName('p')[1].innerText
@@ -52,6 +93,7 @@ export const Profile = (props) => {
     let Usergender = selector.options[selector.selectedIndex].text;
     let SelectInterest = document.getElementById("selectInt");
     let interest = SelectInterest.options[SelectInterest.selectedIndex].text;
+    console.log(name)
     let toSend = {//json to update profile, if name, description, gender and interests were changed
       id: img_id,
       date: date,
@@ -60,9 +102,13 @@ export const Profile = (props) => {
       gender:Usergender,
       interest: interest
     }
-    console.log(toSend)
     let text = JSON.stringify(toSend)
-    console.log(text)
+    //update states
+    setName(partname)
+    setDesc(desc)
+    setMode("View")
+    setGender(Usergender)
+    setInt(interest)
     let response2 = await fetch("/data/profData", {//update the profile
       method: "POST",
       body: text,
@@ -70,17 +116,15 @@ export const Profile = (props) => {
         'Content-type': 'application/json'
       }
     })
-      console.log(img_id);
-      //update states
-      setMode("View")
-      setName(partname)
-      setDesc(desc)
-      setGender(Usergender)
-      setInt(interest)
+
   }
 
   return (
     <div>
+        <Toaster
+        position="top-center"
+        reverseOrder={false}
+        />
       <Menu/> {/*button for opening menu*/}
       <div className='contain'>
         <div className='info_user'>
@@ -89,10 +133,10 @@ export const Profile = (props) => {
             <p className='name_part'>{date}</p>
           </div>
           <div className='name'>{/*mode!='View' appearse the ability to edite the data*/}
-            {mode==='View'? <p className='sname_part'>{name}</p>: <p contentEditable="true" className='sname_part'>{name}</p>}
+            <p contentEditable={mode!=='View'} className='sname_part'>{name}</p>
           </div>
           <div className='description'>
-            {mode==='View'? <p className='desc_part'>{description}</p>: <p contentEditable="true" className='desc_part'>{description}</p>}
+            <p contentEditable={mode!=='View'} className='desc_part'>{description}</p>
             
           </div>
           <div className='gen'>
@@ -122,8 +166,8 @@ export const Profile = (props) => {
           {location.state.mode? mode==='View'? <div className='submit_new' onClick={()=> setMode("Edit")}>Edit</div> : <div className='submit_new' onClick={()=> sendData()}>View</div>: <></>}
         </div>
         <div className='img_container'>
-          <Carusel imgData={location.state.images}/>
-          {mode==='View'? <div></div> : <div className='add-photo' ><form action="/images" method="post" enctype="multipart/form-data">
+          <Carusel imgData={images}/>
+          {mode!=='View' && <div className='add-photo' ><form action="/images" method="post" enctype="multipart/form-data">
                     <input type="file" id="image-input" accept="image/png, image/jpeg" name="uploaded_file" onChange={(e)=> handleSendPhoto(e)} multiple/>
                 </form></div>}
         </div>

@@ -3,9 +3,8 @@ import { Carousel } from "react-responsive-carousel";
 import "react-responsive-carousel/lib/styles/carousel.min.css";
 import './Carusel.css';
 
-
+// for showing images on the profile page
 const Carusel = (props) => {
-  console.log(props.imgData)
   return (
     <div>
        <div className="box">

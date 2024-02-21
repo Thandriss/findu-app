@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React from 'react'
 import { MdClose } from 'react-icons/md';
 import { FiMenu } from 'react-icons/fi';
 import { useState} from 'react';
@@ -9,24 +9,13 @@ import { useTranslation } from 'react-i18next';
 
 export const Menu = () => {
     const [navbarOpen, setNavbarOpen] = useState(false);
-    const nav = useNavigate();
+    const nav = useNavigate(); //nav used, because the Link make UI worse
     const { t } = useTranslation();
 
     //if user clicked on profile button
     const goToProfile = async () => {
-        let userInfo = await fetch("/data/userProf");
-        let data = await userInfo.json();
-        let save = [];
-        console.log(data)
-        for (let i=0; i<data.user.images.length; i++) {
-            let imgInfo = await fetch('/data/images/' + data.user.images[i]);
-            let img = await imgInfo.blob();
-            save.push(img)
-            console.log(save)
-        }
-        console.log(save)
         //set parameters with all user's data
-        nav('/profile',  {state: {images: save, date: data.user.date, name: data.user.name, description: data.user.description, gender: data.user.gender, mode: true}})
+        nav('/profile',  {state: {mode: true}})
     }
 
     const goToCards = async () => {
@@ -39,9 +28,6 @@ export const Menu = () => {
     }
 
     const goToChat = async () => { //go to dashboard with list of chats
-        let names = await fetch('/users/matches');
-        let data = await names.json();
-        console.log(data)
         nav('/chats')
     }
 

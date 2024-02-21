@@ -1,7 +1,6 @@
 var express = require('express');
 var router = express.Router();
 const {body, validationResult } = require("express-validator");
-const bodyParser = require('body-parser');
 const passport = require('passport');
 var moment = require('moment');
 const passSet = require('./config/passport-settings')
@@ -11,20 +10,12 @@ const session = require('express-session');
 const bcrypt = require('bcryptjs')
 const mongoose = require("mongoose");
 const mongoDB = "mongodb://127.0.0.1:27017/testdb"
-const { v4: uuidv4 } = require('uuid');
-const multer  = require('multer');
-const storage = multer.memoryStorage();
-const upload = multer({ storage: storage });
 mongoose.connect(mongoDB);
-console.log(mongoose.connection.readyState);
-console.log("CONNECT");
 mongoose.Promise = Promise;
 const db = mongoose.connection;
 db.on("error", console.error.bind(console, "MongoDB connection error"));
 
-
-
-
+//route for registration
 router.post("/register",
 isNotAuth,  
 body("email").trim().escape(),
@@ -37,7 +28,7 @@ body("password").matches('[~`!@#$%^&*()-_+={}[]|\;:"<>,./?]'),
 async (req , res ) => {
     const errors = validationResult(req);
     if(!errors.isEmpty()) {
-        return res.status(400).send({errors: errors.array()});
+        return res.send({errors: errors.array()});
     }  
     const {email, password} = req.body;
     Users.findOne({email: email})
@@ -46,8 +37,7 @@ async (req , res ) => {
         if(!user) {
             let date = moment();
             let currentDate = date.format('D/MM/YYYY');
-            console.log(currentDate)
-            let newProf =new Profiles({
+            let newProf =new Profiles({// creation the new profile
                 name: "",
                 date: currentDate,
                 description: "",
@@ -57,9 +47,6 @@ async (req , res ) => {
                 liked: [],
                 matched: []
             })
-            console.log(newProf)
-            console.log(newProf._id.toString())
-
             let new_pass 
             await bcrypt
             .genSalt(10)
@@ -67,17 +54,17 @@ async (req , res ) => {
                 bcrypt.hash(password, salt)
                 .then((result) => {
                     new_pass = result
-                    new Users({
+                    new Users({ //creation of the user in 
                         email: email,
                         password: new_pass,
                         profile: newProf._id.toString()
                     }).save()
-                    newProf.save()
-                    res.status(200).send({status: "ok"})
+                    newProf.save()//save profile
+                    return res.status(200).send({status: "ok"})
                 })
             })
         } else {
-            res.status(403).send({email: "Email already in use"})
+            return res.status(403).send({message: "Email already in use"})
         }
     })
 })
@@ -106,6 +93,7 @@ router.get("/google/redirect",
     res.redirect(`http://localhost:3000/cards`);
 });
 
+//router for logout
 router.get('/logout', function(req,res){
     res.clearCookie('connect.sid');
     req.session.destroy(function (err) {
@@ -122,54 +110,34 @@ router.post("/login",
 isNotAuth,
 body("email").trim().escape(),
 async (req, res) => {
-    const {email, password} = req.body;
-    req.session.email = email
-    Users.findOne({email: email})
-    .then ((user) => {
-        if(user) {
-            const sessionUser = {
-                ...user.toJSON(),
-            };
-            delete sessionUser.password;
-            req.session.user = sessionUser;
-            bcrypt.compare(password, user.password, (err, isMatch) => {
-                if(err) throw err
-                if(isMatch) {
-                res.send({"success": true, "user": sessionUser})
+    try {
+        const {email, password} = req.body;
+        Users.findOne({email: email})
+        .then ((user) => {
+            if(user) {
+                req.session.email = email
+                console.log("here")
+                const sessionUser = {
+                    ...user.toJSON(),
+                };
+                delete sessionUser.password;
+                req.session.user = sessionUser;
+                bcrypt.compare(password, user.password, (err, isMatch) => {
+                    if(err) throw err
+                    if(isMatch) {
+                    res.send({success: true, user: sessionUser})
+                } else {
+                    res.send({success: false, message: "Invalid credentials"})
+                }
+            })
             } else {
-                res.send({"success": false, "message": "Invalid credentials"})
+                return res.status(403).send({success: false, message: "Invalid credentials"})
             }
         })
-        } else {
-            res.send({"success": false, "message": "Invalid credentials"})
-        }
-    })
-})
-
-router.post("/images", upload.array("images"), async (req, res) => {
-    let idSave = [];
-    for (let i=0; i<req.files.length; i++) {
-        await Img.findOne({name: req.files[i].originalname})
-        .then((name) => {
-            if(!name) {
-                let newImg = new Img({
-                    name: req.files[i].originalname,
-                    buffer: req.files[i].buffer,
-                    mimetype: req.files[i].mimetype,
-                    encoding: req.files[i].encoding
-                });
-                idSave.push(newImg._id.toString());
-                newImg.save();
-            } else {
-                return res.status(403).send("Have this image");
-            }
-        }).catch((err)=>{
-            console.log(err);
-        });
+    } catch(err) {
+        console.log(err)
     }
-    let result = {"id": idSave};
-    return res.send(result);
-});
+})
 
 
 module.exports = router;

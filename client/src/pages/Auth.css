@@ -23,13 +23,15 @@
 }
 
 #email {
-    margin-left: 9vh;
-    margin-top: 2vh;
+    display: flex;
+    justify-content: center;
+    margin: auto;
 }
 
 #password {
-    margin-left: 9vh;
-    margin-top: 2vh;
+    display: flex;
+    justify-content: center;
+    margin: 1vh auto;
 }
 
 .auth_input .in {
@@ -47,7 +49,7 @@
 .submit-container {
     display:flex;
     gap: 15vw;
-    margin: 50px 65px;
+    margin: 2vh auto;
 }
 .submit {
     display:flex;
@@ -66,7 +68,7 @@
 .thirdP {
     display:flex;
     gap: 15vw;
-    margin: 0px 65px;
+    margin: 1vh auto auto auto;
 }
 #googleAuth {
     display:flex;
@@ -116,14 +118,17 @@
     }
     
     #email {
-        margin-left: 100px;
-        margin-top: 1vh;
+        display: flex;
+        justify-content: center;
+        margin: auto;
     }
 
     #password {
-        margin-left: 100px;
-        margin-top: 1vh;
+        display: flex;
+        justify-content: center;
+        margin: 1vh auto;
     }
+    
     .auth_input .in {
         height: 50px;
         width: 400px;
@@ -139,7 +144,7 @@
     .submit-container {
         display:flex;
         gap: 30px;
-        margin: 20px auto;
+        margin: 20px auto auto auto;
     }
     .submit {
         display:flex;
@@ -158,7 +163,7 @@
     .thirdP {
         display:flex;
         gap: 30px;
-        margin-left: 60px auto;
+        margin: 20px auto;
     }
 
     #googleAuth {

@@ -2,6 +2,7 @@ import Menu from './components/Menu'
 import './UsersChat.css';
 import {useLocation} from 'react-router-dom';
 import { useState } from 'react'
+import {useNavigate} from 'react-router-dom'
 
 const UsersChat = () => {
   const location = useLocation();
@@ -9,6 +10,7 @@ const UsersChat = () => {
   const [edit, setEdit] = useState(false);
   const [chatId, setChatId] = useState(location.state.id) //id of chat for fetch
   const [messId, setMessId] = useState('');
+  const nav = useNavigate();
 
   //function to send a message, if user pressed enter 
   const handleKeyPress = async (event) => { 
@@ -40,12 +42,13 @@ const UsersChat = () => {
   const editMess = (mess) => {
     setEdit(true);
     setMessId(mess)
+    console.log(messId)
     console.log("edit")
   }
 
-  const handleChange = async (event) => {
+  const handleChange = async (event) => { // to handle change of edited messages
     try {
-      let toSend = {
+      let toSend = { //fprm message
         messages: event.target.value,
         chatId: chatId
       }
@@ -58,13 +61,22 @@ const UsersChat = () => {
       })
       let data = await send.json()
       if (!data.message) {
-        setMess(data.messages)//message saved in
+        setMess(data.messages) //message saved in
         console.log("edit")
       }
     } catch (err) {
       console.log(err)
     }
   };
+
+  const goToProfile = async (user) => {
+    //set parameters with all user's data
+    if (user == location.state.name) {
+      nav('/profile',  {state: {mode: false, id: location.state.idOfUser}})
+    } else {
+      nav('/profile',  {state: {mode: true}})
+    }
+}
 
   const handleBlur = () => {
     setEdit(false);
@@ -77,13 +89,13 @@ const UsersChat = () => {
             <div className='message-cont'>
                 {messages.map((mess)=> 
                 <div className='mess-box'onDoubleClick={()=> editMess(mess._id)}>
-                  {mess.name + ' '+ mess.date+': '}
+                  <b onClick={() => goToProfile(mess.name)}>{mess.name}</b> {' '+ mess.date+': '}
                   {edit ? (
                     <input
                       type="text"
                       value={mess.text}
                       onChange={handleChange}
-                      onBlur={handleBlur}
+                      onBlur={handleBlur} //change state
                     />) : (<span>{mess.text}</span>)}
                 </div>)}
             </div>

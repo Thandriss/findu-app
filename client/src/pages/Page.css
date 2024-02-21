@@ -1,0 +1,65 @@
+.logout_b {
+    display:flex;
+    justify-content: center;
+    align-items: center;
+    width: 30vw;
+    height: 59px;
+    color: white;
+    background: black;
+    border-radius: 50px;
+    font-size: 19px;
+    font-weight: 500;
+    cursor: pointer;
+    float: right;
+    margin-top: 50%;
+}
+
+.cards_b {
+    display:flex;
+    justify-content: center;
+    align-items: center;
+    width: 30vw;
+    height: 59px;
+    color: white;
+    background: black;
+    border-radius: 50px;
+    font-size: 19px;
+    font-weight: 500;
+    cursor: pointer;
+    float: left;
+    margin-top: 50%;
+}
+
+@media screen and (min-width: 600px) {
+    .logout_b {
+        display:flex;
+        justify-content: center;
+        align-items: center;
+        width: 220px;
+        height: 59px;
+        color: white;
+        background: black;
+        border-radius: 50px;
+        font-size: 19px;
+        font-weight: 500;
+        cursor: pointer;
+        float: right;
+        margin: 10vh;
+    }
+    
+    .cards_b {
+        display:flex;
+        justify-content: center;
+        align-items: center;
+        width: 220px;
+        height: 59px;
+        color: white;
+        background: black;
+        border-radius: 50px;
+        font-size: 19px;
+        font-weight: 500;
+        cursor: pointer;
+        float: left;
+        margin: 10vh;
+    }
+ }

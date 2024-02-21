@@ -1,32 +1,49 @@
 import { useState } from 'react'
 import {useNavigate} from 'react-router-dom'
 import './Auth.css'
+import toast, { Toaster } from 'react-hot-toast';
+import {useCookies} from 'react-cookie'
 const Auth = () => {
     const [action, setAction] = useState("Sign Up")
+    const [cookies, setCookie] = useCookies(['connect.sid'])
     const nav = useNavigate();
 
     //function for registration which is usin email and password data from input
-    function registration() {
-        fetch("/auth/register", {
+    const registration = async () =>{
+        let res = await fetch("/auth/register", {
             method: "POST",
             headers: {
                 "Content-type": "application/json"
             },
             body: '{ "email": "' + document.getElementById("email").value +'", "password":"' + document.getElementById("password").value +'" }'
         })
+        let data = await res.json()
+        if (data.message) {
+            toast.error(data.message)//toast for error
+        } else if (data.errors) {
+            for (let i=0; i<data.errors.length; i++) {
+                toast.error(data.errors[i].msg)
+            }
+        } else if (data.status) {
+            toast.success('Successfully registration!')
+        }
     }
 
     //function for login which is usin email and password data from input
-    function loggin() {
-        fetch("/auth/login", {
+    const loggin = async () => {
+        let res = await fetch("/auth/login", {
             method: "POST",
             headers: {
                 "Content-type": "application/json"
             },
             body: '{ "email": "' + document.getElementById("email").value +'", "password":"' + document.getElementById("password").value +'" }'
         })
-        //after login user goes on the main page with cards
-        nav('/cards')    
+        let data = await res.json()
+        if (data.message) {
+            toast.error(data.message)//toast for error
+        } else {
+            nav('/cards')//after login user goes on the main page with cards  
+        }
     }
 
     //autherisation via google
@@ -36,6 +53,10 @@ const Auth = () => {
 
   return (
     <div className="b">
+        <Toaster
+        position="top-center"
+        reverseOrder={false}
+        />
         <div className="container">
             <div className="header">
                 <div className="text"> {action}</div>

@@ -31,14 +31,8 @@ export const Main = () => {
     }, [])
 
     //if user presed on the name on the card he will go on user's profile
-    const goToUser = async (name, desc, gender, images, date) => {
-        let save = [];
-        for (let i=0; i<images.length; i++) {
-            let imgInfo = await fetch('/data/images/' + images[i]);
-            let img = await imgInfo.blob();
-            save.push(img)
-        }
-        nav('/profile',  {state: {images: save, date: date, name: name, description: desc, gender: gender, mode: false}})
+    const goToUser = async (id) => {
+        nav('/profile',  {state: {id:id, mode: false}})
     }
     //if match happened a toast with button, which after click on it refers to user's profile
     const goToChat = (id) => {
@@ -77,10 +71,6 @@ export const Main = () => {
             })
         }
     }
-      
-    const outOfFrame = (myIdentifier) => {
-        console.log(myIdentifier + ' left the screen')
-    }
 
   return (
     <div>
@@ -91,9 +81,9 @@ export const Main = () => {
                 <div>
                     <div className='card-container'>
                         {genderedUsers.map((character) => //genetration card to swipe
-                        <TinderCard className='swipe' key={character.name} onSwipe={(dir)=>onSwipe(dir, character._id)} onCardLeftScreen={() => outOfFrame(character.name)}>
+                        <TinderCard className='swipe' key={character.name} onSwipe={(dir)=>onSwipe(dir, character._id)}>
                             <div style={{backgroundImage:'url(' + ')'}} className='card'>
-                                <h3 onClick={() => goToUser(character.name, character.description, character.gender, character.images, character.date)}>{character.name}</h3>
+                                <h3 onClick={() => goToUser(character._id)} className='name_user'>{character.name}</h3>
                                 <div className='discription'>{character.description}</div>
                             </div>
                         </TinderCard>

@@ -10,8 +10,6 @@ const multer  = require('multer');
 const storage = multer.memoryStorage();
 const upload = multer({ storage: storage });
 mongoose.connect(mongoDB);
-console.log(mongoose.connection.readyState);
-console.log("CONNECT");
 mongoose.Promise = Promise;
 const db = mongoose.connection;
 db.on("error", console.error.bind(console, "MongoDB connection error"));
@@ -23,32 +21,45 @@ router.use(express.json({
     type: ['application/json', 'text/plain']
   }))
 
-
+//save image in db
 router.post("/images", upload.array("images"), async (req, res) => {
-    let idSave = [];
-    for (let i=0; i<req.files.length; i++) {
-        await Img.findOne({name: req.files[i].originalname})
-        .then((name) => {
-            if(!name) {
-                let newImg = new Img({
-                    name: req.files[i].originalname,
-                    buffer: req.files[i].buffer,
-                    mimetype: req.files[i].mimetype,
-                    encoding: req.files[i].encoding
-                });
-                idSave.push(newImg._id.toString());
-                newImg.save();
-            } else {
-                return res.status(403).send("Have this image");
+    try {
+        let idSave = [];
+        let flag = false;
+        for (let i=0; i<req.files.length; i++) {
+            await Img.findOne({name: req.files[i].originalname})
+            .then((name) => {
+                console.log("here")
+                if(!name) {
+                    let newImg = new Img({
+                        name: req.files[i].originalname,
+                        buffer: req.files[i].buffer,
+                        mimetype: req.files[i].mimetype,
+                        encoding: req.files[i].encoding
+                    });
+                    idSave.push(newImg._id.toString());
+                    newImg.save();
+                } else {
+                    flag = true
+                }
+            }) 
+            if (flag) {
+                break
             }
-        }).catch((err)=>{
-            console.log(err);
-        });
+        }
+        if (flag) {
+            return res.send({messages: "Have this image"});
+        } else {
+            console.log("here")
+            let result = {id: idSave};
+            return res.send(result);
+        }
+    } catch(err) {
+        res.send({messages: "Have this image"});
     }
-    let result = {"id": idSave};
-    return res.send(result);
 });
 
+//get the information about profile
 router.get("/userProf", (req, res) => {
     Profiles.findById({_id: req.session.user.profile})
     .then((user) => {
@@ -56,6 +67,15 @@ router.get("/userProf", (req, res) => {
     })
 });
 
+//get the information about profile of another user
+router.get("/userProf/:id", (req, res) => {
+    Profiles.findById({_id: req.params.id})
+    .then((user) => {
+        return res.status(200).send({user})
+    })
+});
+
+//get one image from db
 router.get("/images/:imageId", (req, res) => {
     Img.findById(req.params.imageId)
     .then((result) => {
@@ -65,20 +85,19 @@ router.get("/images/:imageId", (req, res) => {
     })
 });
 
+//get interest of the user
 router.get("/interest", (req, res) => {
-    console.log(req.session)
     Profiles.findById({_id: req.session.user.profile})
     .then((user) => {
         return res.status(200).send({interest: user.interest})
     })
 });
 
-
+//get all user's images
 router.get("/userImgs", (req, res) => {
     let saves = []
     Profiles.findById({_id: req.session.user.profile})
     .then(async (user) => {
-        console.log(user.images.length)
         for(let i= 0; i < user.images.length; i++) {
            let result = await Img.findById(user.images[i])
            saves.push(result.buffer)
@@ -87,11 +106,11 @@ router.get("/userImgs", (req, res) => {
     })
 });
 
+//delete images, if user edit the profile
 router.get("/delImgs", (req, res) => {
     let saves = []
     Profiles.findById({_id: req.session.user.profile})
     .then(async (user) => {
-        console.log(user.images.length)
         for(let i= 0; i < user.images.length; i++) {
            let result = await Img.deleteOne({_id: user.images[i]})
            saves.push(result.buffer)
@@ -100,13 +119,13 @@ router.get("/delImgs", (req, res) => {
     })
 });
 
+//update profile information
 router.post("/profData", (req, res) => {
     const {id, date, name, description, gender, interest} = req.body;
     Profiles.findById({_id: req.session.user.profile})
     .then(async (user) => {
         await Profiles.updateOne({_id: req.session.user.profile}, { date: date, name: name, images: id, description: description, gender: gender, interest: interest});
     })
-    res.status(200).send("Iana")
 });
 
 module.exports = router;
