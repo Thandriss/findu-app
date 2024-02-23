@@ -98,7 +98,8 @@ The app have several pages:
 On this
 [video](./images/my_video.mp4) you can see the registration and authentification process
 
-
+# Note: 
+if user added the image in the profile, it is need to reload the page and it will appeare
 
 ## Features
 * Utilization of a frontside framework, such as React, but you can also use Angular, Vue or some other (5)
