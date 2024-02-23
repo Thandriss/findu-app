@@ -20,7 +20,7 @@ export const Profile = (props) => {
   const { t } = useTranslation(); //for translation
   
 
-  const getData = async () => {
+  const getData = async () => { //show data to user
     try {
         if (location.state.mode) {
           let userInfo = await fetch("/data/userProf");

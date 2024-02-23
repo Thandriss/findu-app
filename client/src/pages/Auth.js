@@ -2,10 +2,8 @@ import { useState } from 'react'
 import {useNavigate} from 'react-router-dom'
 import './Auth.css'
 import toast, { Toaster } from 'react-hot-toast';
-import {useCookies} from 'react-cookie'
 const Auth = () => {
     const [action, setAction] = useState("Sign Up")
-    const [cookies, setCookie] = useCookies(['connect.sid'])
     const nav = useNavigate();
 
     //function for registration which is usin email and password data from input
