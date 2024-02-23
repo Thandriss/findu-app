@@ -5,6 +5,7 @@ import { useState, useEffect } from 'react'
 import {useLocation} from 'react-router-dom';
 import Carusel from './components/Carusel';
 import toast, { Toaster } from 'react-hot-toast';
+import { useTranslation } from 'react-i18next';
 
 export const Profile = (props) => {
   const [mode, setMode] = useState("View") //mode of page can be "View" or "Edit"
@@ -16,6 +17,8 @@ export const Profile = (props) => {
   const [UserInterest, setInt] = useState("")
   const [images, setImg] = useState([])
   let save = [];
+  const { t } = useTranslation(); //for translation
+  
 
   const getData = async () => {
     try {
@@ -61,7 +64,6 @@ export const Profile = (props) => {
     save = [];
     const files = e.target.files
     save = files;
-    console.log(save)
   }
   
   const sendData = async () => {
@@ -82,7 +84,7 @@ export const Profile = (props) => {
         });
       let data = await response.json();
       if (data.messages) {
-        toast.error(data.messages)//toast for error
+        toast.error(t(data.messages))//toast for error
       }
       img_id=data.id;
     }
@@ -93,7 +95,6 @@ export const Profile = (props) => {
     let Usergender = selector.options[selector.selectedIndex].text;
     let SelectInterest = document.getElementById("selectInt");
     let interest = SelectInterest.options[SelectInterest.selectedIndex].text;
-    console.log(name)
     let toSend = {//json to update profile, if name, description, gender and interests were changed
       id: img_id,
       date: date,

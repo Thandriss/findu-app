@@ -35,15 +35,12 @@ const UsersChat = () => {
   const getAll = async () => {
     let getInfo = await fetch('/mess/all/' + chatId)
     let data = await getInfo.json() //getting the json 
-    console.log(data.messages)
     setMess(data.messages) //show messages on the screen
   }
 
   const editMess = (mess) => {
     setEdit(true);
     setMessId(mess)
-    console.log(messId)
-    console.log("edit")
   }
 
   const handleChange = async (event) => { // to handle change of edited messages
@@ -62,7 +59,6 @@ const UsersChat = () => {
       let data = await send.json()
       if (!data.message) {
         setMess(data.messages) //message saved in
-        console.log("edit")
       }
     } catch (err) {
       console.log(err)

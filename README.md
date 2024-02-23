@@ -43,6 +43,21 @@
     
     Open file in path server/routes/keys.js and write there your id and secret from google API.
 
+    Go to google API and go to credentinals page
+
+    ![credentinals](./images/Cred.png)
+
+    Press on create button and OAuth client ID
+
+    ![credentinals](./images/Create.png)
+
+    Fill the information
+
+    ![credentinals](./images/fill.png)
+
+    Copy and paste the id and secret from this fields
+
+    ![credentinals](./images/copy.png)
 
 5. **Install dependencies**
     
@@ -87,13 +102,29 @@ On this
 
 ## Features
 * Utilization of a frontside framework, such as React, but you can also use Angular, Vue or some other (5)
+
+    React is used in whole client side project.
 * One can swipe to left or right to dislike or like the profile (2)
+
+    On the route '/cards' are cards, which user can swipe. If user swipes on the right, another user will be liked/matched (if like is mutual). If user swipes on the right, another user will be disliked.
 * Use of a pager when there is more than 10 chats available available (2)
+
+    On the route '/chats' is the list of chats, if them more than 10, division on pagaes will be available
 * Login with Facebook, Google, X or other accounts (use Passport.js) (2)
+
+    The page with login and registration is on the route '/', if user is not authenticated. The clicking on grey button with sign 'Log in' will change the form for log in. There will be the red button with sign 'Google+'. If user clickes on this button, he will go through the process of authentication.
 * If match is being found the UI gives option to start chat immediately (2)
+
+    If the users are matched, the toast appeares with button "Open the chat!", which can be pressed and user can write the message there. 
 * User can click username and see user profile page where name, register date, (user picture) and user bio is listed (2)
+
+    This feature was implemented in routes '/cards', on the card, which user can swipe, is the name of user, which he can click and go to the profile of these user, and '/userchat', where user can click on the bold nsme of another user and go to the profile.
 * Last edited timestamp is stored and shown within chat (2)
+
+    On the '/userchat' route and with double clicking on the own message user can edit it and the timestamp will be changed.
 * Translation of the whole UI in two or more languages (2)
+    
+    The UI is translated on russian and english languages, except the page with registration and log in.
 
 **In total**: 19 additional points and 25 for the main features = 44 points
 
